@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MedicalHistory>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Animal>
  */
-class MedicalHistoryFactory extends Factory
+class AnimalFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,8 @@ class MedicalHistoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'lastcheckup' => $this->faker->date(),
-            'description' => $this->faker->paragraph(),
+            'name' => $this->faker->word(),
+		    'species' => $this->faker->randomElement(['Panda', 'Jiraffe', 'Lion', 'Tiger', 'eBear']),
         ];
     }
 }

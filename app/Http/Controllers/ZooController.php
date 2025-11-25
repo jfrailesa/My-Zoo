@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\zoo;
+use App\Models\Zoo;
 
 use Illuminate\Http\Request;
 
@@ -13,7 +13,7 @@ class ZooController extends Controller
     // Display all zoos
     public function index()
     {
-        $zoos = zoo::all();
+        $zoos = Zoo::all();
         return view('zoos.index', compact('zoos'));
     }
 
@@ -46,7 +46,7 @@ class ZooController extends Controller
      * Display the specified resource.
      */
      // Show a specific zoo 
-    public function show(zoo $zoo)
+    public function show(Zoo $zoo)
     {
         return view('zoos.show', compact('zoo'));
     }
@@ -55,7 +55,7 @@ class ZooController extends Controller
      * Show the form for editing the specified resource.
      */
     // Show form to edit an zoo 
-    public function edit(zoo $zoo)
+    public function edit(Zoo $zoo)
     {
         return view('zoos.edit', compact('zoo'));
     }
@@ -64,7 +64,7 @@ class ZooController extends Controller
      * Update the specified resource in storage.
      */
     // Update an existing zoo 
-    public function update(Request $request, zoo $zoo)
+    public function update(Request $request, Zoo $zoo)
     {
         $request->validate([
             'name' => 'required',
@@ -80,7 +80,7 @@ class ZooController extends Controller
      * Remove the specified resource from storage.
      */
     // Delete an zoo (for future use)
-    public function destroy(zoo $zoo)
+    public function destroy(Zoo $zoo)
     {
         $zoo->delete();
         return redirect()->route('zoos.index')->with('success', 'zoo deleted successfully!');

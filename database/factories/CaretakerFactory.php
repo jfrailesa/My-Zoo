@@ -17,7 +17,9 @@ class CaretakerFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'id' => $this->faker->unique()->numberBetween(1, 999999),
+            'name' => $this->faker->name(),
+            'yearsofexp' => $this->faker->numberBetween(1, 40),
         ];
     }
 }

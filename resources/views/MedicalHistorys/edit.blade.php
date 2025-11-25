@@ -18,10 +18,10 @@
         @csrf
         @method('PUT')
 
-        <label>Name:</label>
+        <label>Last Checkup:</label>
         <input type="date" name="lastcheckup" value="{{ old('name', $MedicalHistory->lastcheckup) }}" required><br><br>
 
-        <label>Name:</label>
+        <label>Description:</label>
         <input type="text" name="description" value="{{ old('location', $MedicalHistory->description) }}" required><br><br>
 
         <button type="submit">Update MedicalHistory</button>

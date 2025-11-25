@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class zoo extends Model
+class Zoo extends Model
 {
     /** @use HasFactory<\Database\Factories\ZooFactory> */
     use HasFactory;

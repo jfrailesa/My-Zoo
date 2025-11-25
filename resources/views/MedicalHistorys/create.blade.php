@@ -16,10 +16,10 @@
 
     <form action="{{ route('MedicalHistorys.store') }}" method="POST">
         @csrf
-        <label>Name:</label>
+        <label>Last Checkup:</label>
         <input type="date" name="lastcheckup" required><br><br>
 
-        <label>Size:</label>
+        <label>Description:</label>
         <input type="text" name="description" required><br><br>
 
         <button type="submit">Add MedicalHistory</button>

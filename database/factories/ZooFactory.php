@@ -17,7 +17,9 @@ class ZooFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name'     => $this->faker->company(),     // example zoo name
+            'size'     => $this->faker->numberBetween(1, 500), // size in acres or similar
+            'location' => $this->faker->city(),
         ];
     }
 }
