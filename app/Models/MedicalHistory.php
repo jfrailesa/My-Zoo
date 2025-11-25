@@ -14,4 +14,9 @@ class MedicalHistory extends Model
            'lastcheckup',
            'description'
         ];
+
+    public function animal()
+    {
+        return $this->belongsTo(Animal::class)->withDefault();
+    }
 }

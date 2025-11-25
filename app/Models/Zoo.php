@@ -15,4 +15,9 @@ class Zoo extends Model
            'size',
            'location'
         ];
+
+    public function animals()
+    {
+        return $this->hasMany(Animal::class);
+    }
 }

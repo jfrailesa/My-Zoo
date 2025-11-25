@@ -15,4 +15,10 @@ class Caretaker extends Model
            'id',
            'yearsofexp'
         ];
+    
+    public function animals()
+    {
+        return $this->belongsToMany(Animal::class)->withTimestamps();
+    }
+
 }

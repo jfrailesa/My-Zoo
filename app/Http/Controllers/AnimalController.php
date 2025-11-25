@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Animal;
+use App\Models\Zoo;
+use App\Models\Caretaker;
+use App\Models\MedicalHistory;
 
 use Illuminate\Http\Request;
 
@@ -56,7 +59,31 @@ class AnimalController extends Controller
     // Show form to edit an animal 
     public function edit(Animal $animal)
     {
-        return view('animals.edit', compact('animal'));
+        $zoos = Zoo::all();
+        $caretakers = Caretaker::all();
+        $medicalHistories = MedicalHistory::all();
+
+        // Prepare the "selected" values safely (old() takes precedence)
+        $selectedZoo = old('zoo_id', $animal->zoo_id);
+
+        $selectedMedicalHistory = old('medical_history_id',
+            optional($animal->medicalHistory)->id
+        );
+
+        // Ensure we always pass an array for selected caretakers
+        $selectedCaretakers = old('caretaker_ids',
+            $animal->caretakers ? $animal->caretakers->pluck('id')->toArray() : []
+        );
+
+        return view('animals.edit', compact(
+            'animal',
+            'zoos',
+            'caretakers',
+            'medicalHistories',
+            'selectedZoo',
+            'selectedMedicalHistory',
+            'selectedCaretakers'
+        ));
     }
 
     /**
@@ -65,15 +92,42 @@ class AnimalController extends Controller
     // Update an existing animal 
     public function update(Request $request, Animal $animal)
     {
-        $request->validate([
-            'name' => 'required',
-            'species' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'species' => 'required|string|max:255',
+            'zoo_id' => 'nullable|exists:zoos,id',
+            'medical_history_id' => 'nullable|exists:medical_histories,id',
+            'caretaker_ids' => 'nullable|array',
+            'caretaker_ids.*' => 'exists:caretakers,id',
         ]);
 
-        $animal->update($request->only(['name', 'species']));
+        // Update basic fields
+        $animal->update([
+            'name' => $validated['name'],
+            'species' => $validated['species'],
+            'zoo_id' => $validated['zoo_id'] ?? null,
+        ]);
 
-        return redirect()->route('animals.index')->with('success', 'Animal updated successfully!');
+        // Update medical history (one-to-one)
+        if (!empty($validated['medical_history_id'])) {
+            $medicalHistory = MedicalHistory::find($validated['medical_history_id']);
+            if ($medicalHistory) {
+                $medicalHistory->animal_id = $animal->id;
+                $medicalHistory->save();
+            }
+        } else {
+            if ($animal->medicalHistory) {
+                $animal->medicalHistory->animal_id = null;
+                $animal->medicalHistory->save();
+            }
+        }
+
+        // Sync caretakers (many-to-many)
+        $animal->caretakers()->sync($validated['caretaker_ids'] ?? []);
+
+        return redirect()->route('animals.index')->with('success', 'Animal updated successfully.');
     }
+
     /**
      * Remove the specified resource from storage.
      */

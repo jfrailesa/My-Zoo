@@ -11,6 +11,22 @@ class Animal extends Model
     protected $fillable = [
            'name',
            'species',
+           'zoo_id',
         ];
 
+
+    public function zoo()
+    {
+        return $this->belongsTo(Zoo::class)->withDefault(); 
+    }
+
+    public function medicalHistory()
+    {
+        return $this->hasOne(MedicalHistory::class);
+    }
+
+    public function caretakers()
+    {
+        return $this->belongsToMany(Caretaker::class)->withTimestamps();
+    }
 }
